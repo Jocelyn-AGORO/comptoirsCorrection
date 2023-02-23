@@ -47,25 +47,29 @@
             return result;
         }
 
-
-        function enregistreCategorie() {
-            console.log("Données envoyées : %o", categorieASauvegarder);
-            const options = {
-                method: "POST",
-                headers: { // On indique qu'on envoie du JSON
-                    "Content-Type": "application/json"
-                },
-                // On envoie les données au format JSON
-                // dans le corps de la requête
-                body: JSON.stringify(categorieASauvegarder)
-            };
-            fetch("api/categories", options)
-                // Si pas d'erreur réseau, on convertit le json reçu en objet javascript
-                .then(response => response.json())
-                // On affiche le résultat (même s'il y a eu une erreur de l'API)
-                .then(showResult)
-                // en cas d'erreur réseau
-                .catch(showError);
+        function enregistreCategorie(event) {
+            event.preventDefault();
+            let categorie = {
+                libelle: event.target.libelle.value,
+                description: event.target.description.value
+            }
+            console.log("Données envoyées : %o", categorie);
+             const options = {
+                 method: "POST",
+                 headers: { // On indique qu'on envoie du JSON
+                     "Content-Type": "application/json"
+                 },
+                 // On envoie les données au format JSON
+                 // dans le corps de la requête
+                 body: JSON.stringify(categorie)
+             };
+             fetch("api/categories", options)
+                 // Si pas d'erreur réseau, on convertit le json reçu en objet javascript
+                 .then(response => response.json())
+                 // On affiche le résultat (même s'il y a eu une erreur de l'API)
+                 .then(showResult)
+                 // en cas d'erreur réseau
+                 .catch(showError);
         }
     </script>
 </head>
@@ -73,8 +77,19 @@
 <body>
     <h1>Exemple d'appel AJAX avec l'API fetch</h1>
     <h2>Sauvegarder une catégorie</h2>
-
-    <button onclick="enregistreCategorie()">Enregistrer une nouvelle catégorie</button><br>
+    <div>
+        <form onsubmit="enregistreCategorie" method="post">
+            <p>
+                <label for="libelle">Libelle : </label>
+                <input type="text" name="libelle" id="libelle">
+            </p>
+            <p>
+                <label for="description">Description : </label>
+                <input type="text" name="description" id="description">
+            </p>
+            <button type="submit" >Enregistrer une nouvelle catégorie</button><br>
+        </form>
+    </div>
 
     <div>Ouvrez la console pour voir le résultat</div>
     <hr>
